@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+    web:
+        build: ./api
+        container_name: is_palindrom_web
+        ports:
+        - "8080:8080"
+        restart: unless-stopped
+        env_file:
+            - db/pg-variables.env
+        networks:
+            - backend
+
+    db:
+        build: ./db
+        container_name: is_palindrom_db
+        restart: unless-stopped
+        ports:
+            - '5432:5432'
+        env_file:
+            - db/pg-variables.env
+        volumes:
+            - database-data:/var/lib/postgresql/data/
+        networks:
+            - backend
+
+volumes:
+    database-data:
+
+networks:
+    backend:
